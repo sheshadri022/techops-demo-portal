@@ -17,6 +17,11 @@ import Login from "@/pages/login";
 import MyTickets from "@/pages/end-user/my-tickets";
 import SubmitTicket from "@/pages/end-user/submit-ticket";
 import MyAssets from "@/pages/end-user/my-assets";
+import { setBaseUrl } from "@workspace/api-client-react";
+
+if (import.meta.env.VITE_API_URL) {
+  setBaseUrl(import.meta.env.VITE_API_URL as string);
+}
 
 const queryClient = new QueryClient();
 
