@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { useAuth } from "@/context/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,7 @@ const DEMO_ACCOUNTS = [
 
 export default function Login() {
   const { login } = useAuth();
+  const [, setLocation] = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -42,8 +44,10 @@ export default function Login() {
       const result = login(email, password);
       if (!result.success) {
         setError(result.error ?? "Login failed.");
+        setLoading(false);
+      } else {
+        setLocation("/");
       }
-      setLoading(false);
     }, 400);
   }
 
