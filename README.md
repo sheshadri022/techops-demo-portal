@@ -45,21 +45,19 @@ The project is built with a contract-first API (OpenAPI → code-generated hooks
 ## Screenshots
 
 ### Login Page
-![Login Page](./attached_assets/screenshots/techops-portal_onrender_com.png)
+![Login Page](./docs/screenshots/login.jpg)
 
 ### Dashboard
-![Dashboard](./docs/screenshots/dashboard.png)
+![Dashboard](./docs/screenshots/dashboard.jpg)
 
 ### Asset Management
-![Assets](./docs/screenshots/assets.png)
+![Assets](./docs/screenshots/assets.jpg)
 
 ### Helpdesk Tickets
-![Tickets](./docs/screenshots/tickets.png)
+![Tickets](./docs/screenshots/tickets.jpg)
 
 ### Employee Directory
-![Employees](./docs/screenshots/employees.png)
-
-> Screenshots stored in `docs/screenshots/`. Add your own by running the app and capturing the pages.
+![Employees](./docs/screenshots/employees.jpg)
 
 ---
 
