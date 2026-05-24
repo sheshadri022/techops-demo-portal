@@ -1,4 +1,4 @@
-import { useState, useContext, createContext } from "react";
+import { useState, useEffect, useContext, createContext } from "react";
 
 export type UserRole = "admin" | "user";
 
@@ -39,10 +39,39 @@ const DEMO_CREDENTIALS: Record<string, { password: string; user: AuthUser }> = {
   },
 };
 
+const LS_KEY = "techops-auth-user";
+
+function getAutoLoginUser(): AuthUser | null {
+  const params = new URLSearchParams(window.location.search);
+  const demo = params.get("demoLogin");
+  if (demo === "admin") return DEMO_CREDENTIALS["admin@techopsdemo.com"].user;
+  if (demo === "user") return DEMO_CREDENTIALS["user@techopsdemo.com"].user;
+  return null;
+}
+
+function loadStoredUser(): AuthUser | null {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? (JSON.parse(raw) as AuthUser) : null;
+  } catch {
+    return null;
+  }
+}
+
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(
+    () => getAutoLoginUser() ?? loadStoredUser()
+  );
+
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem(LS_KEY, JSON.stringify(user));
+    } else {
+      localStorage.removeItem(LS_KEY);
+    }
+  }, [user]);
 
   function login(email: string, password: string): { success: boolean; error?: string } {
     const record = DEMO_CREDENTIALS[email.toLowerCase().trim()];
