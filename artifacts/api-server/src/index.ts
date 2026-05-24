@@ -1,3 +1,9 @@
+// Force IPv4 DNS resolution globally — must be called before any network
+// operations so hosts like db.*.supabase.co resolve to their A record
+// rather than the AAAA record on environments without IPv6 routing (Render).
+import { setDefaultResultOrder } from "dns";
+setDefaultResultOrder("ipv4first");
+
 import app from "./app";
 import { logger } from "./lib/logger";
 import { runMigrations } from "./migrate";
