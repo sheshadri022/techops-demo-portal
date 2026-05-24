@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Switch, Route, Router as WouterRouter, Redirect } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -5,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Layout } from "@/components/layout";
 import { EndUserLayout } from "@/components/end-user-layout";
 import { AuthProvider, useAuth } from "@/context/auth";
+import { ApiWakeupBanner } from "@/components/api-wakeup-banner";
+import { restoreQueryCache, persistQueryCache } from "@/lib/query-persistence";
 import Dashboard from "@/pages/dashboard";
 import Assets from "@/pages/assets";
 import AssetDetail from "@/pages/asset-detail";
@@ -23,7 +26,18 @@ if (import.meta.env.VITE_API_URL) {
   setBaseUrl(import.meta.env.VITE_API_URL as string);
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 30_000,
+      gcTime: 5 * 60_000,
+      retry: 3,
+      retryDelay: (attempt) => Math.min(1000 * 2 ** attempt, 15_000),
+    },
+  },
+});
+
+restoreQueryCache(queryClient);
 
 function AdminPortal() {
   return (
@@ -71,6 +85,10 @@ function AppRoutes() {
 }
 
 function App() {
+  useEffect(() => {
+    return persistQueryCache(queryClient);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -79,6 +97,7 @@ function App() {
             <AppRoutes />
           </WouterRouter>
           <Toaster />
+          <ApiWakeupBanner />
         </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
