@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { LayoutDashboard, Monitor, Ticket, Users, LogOut, ChevronDown } from "lucide-react";
+import { LayoutDashboard, Monitor, Ticket, Users, LogOut, ChevronDown, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/auth";
 import { useState } from "react";
@@ -11,20 +11,38 @@ const navigation = [
   { name: "Employees", href: "/employees", icon: Users },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const [location] = useLocation();
   const { user, logout } = useAuth();
   const [showSignOut, setShowSignOut] = useState(false);
 
   return (
-    <div className="flex h-full w-64 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
-      <div className="flex h-16 items-center px-6 border-b border-sidebar-border/50">
+    <aside
+      className={cn(
+        "fixed inset-y-0 left-0 z-30 flex h-full w-64 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-transform duration-300 ease-in-out",
+        "md:static md:translate-x-0 md:z-auto md:transition-none",
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      )}
+    >
+      <div className="flex h-16 items-center justify-between px-6 border-b border-sidebar-border/50">
         <h1 className="text-xl font-bold font-sans tracking-tight text-sidebar-primary-foreground flex items-center gap-2">
           <div className="w-8 h-8 bg-sidebar-primary rounded flex items-center justify-center">
             <span className="text-primary font-black leading-none tracking-tighter">T</span>
           </div>
           TechOps
         </h1>
+        <button
+          className="md:hidden p-1 rounded text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
+          onClick={onClose}
+          aria-label="Close menu"
+        >
+          <X className="h-5 w-5" />
+        </button>
       </div>
 
       <div className="px-4 pt-4 pb-2">
@@ -38,8 +56,9 @@ export function Sidebar() {
             <Link
               key={item.name}
               href={item.href}
+              onClick={onClose}
               className={cn(
-                "group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                "group flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors",
                 isActive
                   ? "bg-sidebar-accent text-sidebar-accent-foreground"
                   : "text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground"
@@ -59,7 +78,6 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* User section — initials only, no photo, with sign out */}
       <div className="p-4 border-t border-sidebar-border/50">
         <button
           onClick={() => setShowSignOut(!showSignOut)}
@@ -88,6 +106,6 @@ export function Sidebar() {
           </div>
         )}
       </div>
-    </div>
+    </aside>
   );
 }
