@@ -31,14 +31,7 @@ The project is built with a contract-first API (OpenAPI → code-generated hooks
 **Frontend:** [https://techops-portal.onrender.com](https://techops-portal.onrender.com)  
 **API:** [https://techops-api-76ir.onrender.com/api/healthz](https://techops-api-76ir.onrender.com/api/healthz)
 
-### Demo Credentials
-
-| Role | Email | Password | Access |
-|------|-------|----------|--------|
-| Admin | `admin@techopsdemo.com` | `admin123` | Full admin — assets, tickets, employees, dashboard |
-| End User | `user@techopsdemo.com` | `user123` | Self-service — submit tickets, view assigned gear |
-
-> **Note:** Hosted on Render's free tier — first load may take ~30 seconds for the service to wake up.
+> **Note:** Hosted on Render's free tier — first load may take ~30 seconds for the service to wake up. Demo login credentials are available on the login page itself.
 
 ---
 
@@ -240,7 +233,7 @@ Or if using Replit, the workflows start everything automatically.
 
 ### 6. Open the App
 
-Navigate to `http://localhost:5173` (or whichever port Vite picks). Login with the demo credentials above.
+Navigate to `http://localhost:5173` (or whichever port Vite picks). Demo login credentials are shown on the login screen.
 
 ### Useful Commands
 
@@ -259,24 +252,18 @@ pnpm --filter @workspace/api-spec run codegen
 
 ## Environment Variables
 
-Create a `.env` file at the project root. **Never commit real secrets to version control.**
+Create a `.env` file at the project root. **Never commit this file — add it to `.gitignore` before adding any values.**
 
-```env
-# ─── Database ─────────────────────────────────────────────────────────────────
-DATABASE_URL=postgresql://user:password@host:5432/dbname
+The application requires the following environment variables. Obtain each value from your own infrastructure and set them securely:
 
-# For Supabase (transaction pooler — recommended for serverless)
-# DATABASE_URL=postgresql://postgres.[project-ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL connection string (local, Render PG, Supabase pooler, etc.) |
+| `SESSION_SECRET` | A long, random string used to sign sessions |
+| `NODE_ENV` | Set to `development` locally, `production` on the server |
+| `ALLOWED_ORIGINS` | Comma-separated list of frontend origins allowed for CORS |
 
-# ─── Server ───────────────────────────────────────────────────────────────────
-SESSION_SECRET=your-random-secret-at-least-32-chars
-NODE_ENV=development
-
-# ─── CORS ─────────────────────────────────────────────────────────────────────
-ALLOWED_ORIGINS=http://localhost:5173
-```
-
-> In production (Render, Railway, etc.), set these as environment variables in the service dashboard — do not use a `.env` file on the server.
+> In production (Render, Railway, etc.), set these directly in the service dashboard's environment settings — never use a `.env` file on a live server.
 
 ---
 
