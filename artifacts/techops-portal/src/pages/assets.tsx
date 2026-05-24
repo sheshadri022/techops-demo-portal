@@ -117,8 +117,8 @@ export default function Assets() {
     <div className="space-y-6 max-w-7xl mx-auto">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Hardware Fleet</h1>
-          <p className="text-muted-foreground mt-1 text-lg">Manage and track all company IT assets.</p>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">Hardware Fleet</h1>
+          <p className="text-muted-foreground mt-1 text-sm md:text-lg">Manage and track all company IT assets.</p>
         </div>
         
         <Dialog open={isNewOpen} onOpenChange={setIsNewOpen}>
@@ -304,8 +304,8 @@ export default function Assets() {
         </div>
       </div>
 
-      <div className="border rounded-lg bg-card shadow-sm overflow-hidden">
-        <Table>
+      <div className="border rounded-lg bg-card shadow-sm overflow-hidden overflow-x-auto">
+        <Table className="min-w-[600px]">
           <TableHeader>
             <TableRow className="bg-muted/50">
               <TableHead>Asset</TableHead>
